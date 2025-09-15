@@ -28,6 +28,11 @@
         background: #f0f0f0;
         padding: 20px;
         overflow-y: auto;
+        max-height: 100vh;
+      }
+      #history {
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
       }
       .bet-item {
         margin-bottom: 5px;
@@ -57,7 +62,10 @@
         <div style="margin: 10px 0;">
           <input type="number" id="customAmount" placeholder="Custom amount" min="1">
           <button onclick="customBet()">Bet Custom</button>
-          <button id="autoBetBtn" onclick="autoBet()">Auto Bet</button>
+          <button id="autoBetBtn" onclick="autoBet()">Auto Bet (Martingale)</button>
+        </div>
+        <div id="stats" style="margin: 10px 0; font-size: 14px; color: #666;">
+          Win/Loss: <span id="winLossRatio">0/0</span> | Win %: <span id="winPercentage">0%</span>
         </div>
       </div>
     </div>
