@@ -11,12 +11,14 @@ This project was created to experiment with Amazon Q Developer's Claude Sonnet 4
 - **Token System**: Start with 100 tokens
 - **Multiple Betting Strategies**:
   - **Bet Half**: Bets half of current tokens
+  - **All-In**: Bets all current tokens (double or nothing)
   - **Martingale**: Bets 1/15 of current tokens, doubles on loss (max 3 consecutive losses)
   - **Custom Amount**: Bet any amount you specify
   - **Auto Bet**: Automated betting until +1000 tokens gained
 - **Live Updates**: Real-time token display with 300ms intervals during auto-betting
 - **Bet History**: Sidebar showing all previous bets with win/loss tracking
 - **Game Over**: "You Lose" screen when tokens ≤ 1
+- **Tablet-Friendly**: 700px max width for optimal tablet viewing
 
 ## Files
 
@@ -33,6 +35,7 @@ This project was created to experiment with Amazon Q Developer's Claude Sonnet 4
 ## Betting Logic
 
 - **50/50 odds** for all bets (red/black simulation)
+- **All-In risk**: Win doubles tokens, loss sets tokens to 0
 - **Martingale protection**: Disabled after 3 consecutive losses, re-enabled on any win
 - **Auto-bet intelligence**: Uses martingale when tokens ≥ 100, otherwise bet half
 - **Stop conditions**: Auto-bet stops at +1000 tokens or game over

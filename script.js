@@ -26,21 +26,50 @@ function bet() {
   }
   
   if (tokens <= 1) {
-    document.getElementById('tokens').style.display = 'none';
-    document.getElementById('loseMessage').style.display = 'block';
-    document.getElementById('betBtn').style.display = 'none';
-    document.getElementById('martingaleBtn').style.display = 'none';
-    document.querySelector('button[onclick="reset()"]').style.display = 'none';
-    document.getElementById('customAmount').style.display = 'none';
-    document.querySelector('button[onclick="customBet()"]').style.display = 'none';
-    document.getElementById('autoBetBtn').style.display = 'none';
-    document.getElementById('stats').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'inline';
-    autoBetting = false;
+    showGameOver();
   } else {
     document.getElementById('tokens').textContent = tokens;
     checkMartingaleButtons();
   }
+}
+
+function allInBet() {
+  if (tokens <= 0) return;
+  
+  const betAmount = tokens;
+  const win = Math.random() < 0.5;
+  const oldTokens = tokens;
+  tokens = win ? tokens + betAmount : 0;
+  
+  history.unshift({ bet: betAmount, win, oldTokens, newTokens: tokens });
+  updateHistory();
+  
+  if (win) {
+    martingaleLosses = 0;
+    document.getElementById('martingaleBtn').disabled = false;
+  }
+  
+  if (tokens <= 1) {
+    showGameOver();
+  } else {
+    document.getElementById('tokens').textContent = tokens;
+    checkMartingaleButtons();
+  }
+}
+
+function showGameOver() {
+  document.getElementById('tokens').style.display = 'none';
+  document.getElementById('loseMessage').style.display = 'block';
+  document.getElementById('betBtn').style.display = 'none';
+  document.getElementById('allInBtn').style.display = 'none';
+  document.getElementById('martingaleBtn').style.display = 'none';
+  document.querySelector('button[onclick="reset()"]').style.display = 'none';
+  document.getElementById('customAmount').style.display = 'none';
+  document.querySelector('button[onclick="customBet()"]').style.display = 'none';
+  document.getElementById('autoBetBtn').style.display = 'none';
+  document.getElementById('stats').style.display = 'none';
+  document.getElementById('resetBtn').style.display = 'inline';
+  autoBetting = false;
 }
 
 function martingaleBet() {
@@ -73,16 +102,7 @@ function martingaleBet() {
   }
   
   if (tokens <= 1) {
-    document.getElementById('tokens').style.display = 'none';
-    document.getElementById('loseMessage').style.display = 'block';
-    document.getElementById('betBtn').style.display = 'none';
-    document.getElementById('martingaleBtn').style.display = 'none';
-    document.querySelector('button[onclick="reset()"]').style.display = 'none';
-    document.getElementById('customAmount').style.display = 'none';
-    document.querySelector('button[onclick="customBet()"]').style.display = 'none';
-    document.getElementById('autoBetBtn').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'inline';
-    autoBetting = false;
+    showGameOver();
   } else {
     document.getElementById('tokens').textContent = tokens;
     checkMartingaleButtons();
@@ -106,16 +126,7 @@ function customBet() {
   }
   
   if (tokens <= 1) {
-    document.getElementById('tokens').style.display = 'none';
-    document.getElementById('loseMessage').style.display = 'block';
-    document.getElementById('betBtn').style.display = 'none';
-    document.getElementById('martingaleBtn').style.display = 'none';
-    document.querySelector('button[onclick="reset()"]').style.display = 'none';
-    document.getElementById('customAmount').style.display = 'none';
-    document.querySelector('button[onclick="customBet()"]').style.display = 'none';
-    document.getElementById('autoBetBtn').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'inline';
-    autoBetting = false;
+    showGameOver();
   } else {
     document.getElementById('tokens').textContent = tokens;
     checkMartingaleButtons();
@@ -204,6 +215,7 @@ function reset() {
   document.getElementById('tokens').style.display = 'block';
   document.getElementById('loseMessage').style.display = 'none';
   document.getElementById('betBtn').style.display = 'inline';
+  document.getElementById('allInBtn').style.display = 'inline';
   document.getElementById('martingaleBtn').style.display = 'inline';
   document.getElementById('martingaleBtn').disabled = false;
   document.querySelector('button[onclick="reset()"]').style.display = 'inline';
