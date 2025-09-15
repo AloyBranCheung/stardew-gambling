@@ -3,6 +3,8 @@ let history = [];
 let martingaleBetAmount = Math.floor(100 / 15);
 let martingaleLosses = 0;
 let lastLoss = 0;
+let autoBetting = false;
+let autoBetStartTokens = 0;
 
 function bet() {
   const betAmount = Math.floor(tokens / 2);
@@ -28,7 +30,9 @@ function bet() {
     document.querySelector('button[onclick="reset()"]').style.display = 'none';
     document.getElementById('customAmount').style.display = 'none';
     document.querySelector('button[onclick="customBet()"]').style.display = 'none';
+    document.getElementById('autoBetBtn').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'inline';
+    autoBetting = false;
   } else {
     document.getElementById('tokens').textContent = tokens;
   }
@@ -71,7 +75,9 @@ function martingaleBet() {
     document.querySelector('button[onclick="reset()"]').style.display = 'none';
     document.getElementById('customAmount').style.display = 'none';
     document.querySelector('button[onclick="customBet()"]').style.display = 'none';
+    document.getElementById('autoBetBtn').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'inline';
+    autoBetting = false;
   } else {
     document.getElementById('tokens').textContent = tokens;
   }
@@ -101,12 +107,54 @@ function customBet() {
     document.querySelector('button[onclick="reset()"]').style.display = 'none';
     document.getElementById('customAmount').style.display = 'none';
     document.querySelector('button[onclick="customBet()"]').style.display = 'none';
+    document.getElementById('autoBetBtn').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'inline';
+    autoBetting = false;
   } else {
     document.getElementById('tokens').textContent = tokens;
   }
   
   document.getElementById('customAmount').value = '';
+}
+
+function autoBet() {
+  if (autoBetting) {
+    autoBetting = false;
+    document.getElementById('autoBetBtn').textContent = 'Auto Bet';
+    return;
+  }
+  
+  autoBetting = true;
+  autoBetStartTokens = tokens;
+  document.getElementById('autoBetBtn').textContent = 'Stop Auto';
+  
+  function runAutoBet() {
+    if (!autoBetting || tokens <= 1) {
+      if (tokens <= 1) {
+        autoBetting = false;
+        document.getElementById('autoBetBtn').textContent = 'Auto Bet';
+      }
+      return;
+    }
+    
+    if (tokens >= autoBetStartTokens + 1000) {
+      autoBetting = false;
+      document.getElementById('autoBetBtn').textContent = 'Auto Bet';
+      return;
+    }
+    
+    if (tokens >= 100) {
+      martingaleBet();
+    } else {
+      bet();
+    }
+    
+    if (autoBetting && tokens > 1) {
+      setTimeout(runAutoBet, 300);
+    }
+  }
+  
+  runAutoBet();
 }
 
 function reset() {
@@ -115,6 +163,7 @@ function reset() {
   martingaleBetAmount = Math.floor(100 / 15);
   martingaleLosses = 0;
   lastLoss = 0;
+  autoBetting = false;
   updateHistory();
   document.getElementById('tokens').textContent = tokens;
   document.getElementById('tokens').style.display = 'block';
@@ -125,6 +174,8 @@ function reset() {
   document.querySelector('button[onclick="reset()"]').style.display = 'inline';
   document.getElementById('customAmount').style.display = 'inline';
   document.querySelector('button[onclick="customBet()"]').style.display = 'inline';
+  document.getElementById('autoBetBtn').style.display = 'inline';
+  document.getElementById('autoBetBtn').textContent = 'Auto Bet';
   document.getElementById('resetBtn').style.display = 'none';
 }
 
